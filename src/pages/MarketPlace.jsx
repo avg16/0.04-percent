@@ -1,27 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { ethers } from "ethers";
-import { MARKETPLACE_ABI,MARKETPLACE_ADDRESS } from "../utils/constants";
+import React, { useEffect, useState, useContext } from "react";
+import { Web3Context } from "../hooks/Web3hook";
+import "./styles/Marketplace.css"; // Import CSS file
 
 const Marketplace = () => {
+    const { walletAddress, contract } = useContext(Web3Context); // Use global Web3 state
     const [organizations, setOrganizations] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchOrganizations();
-    }, []);
+        if (contract) {
+            fetchOrganizations();
+        }
+    }, [contract]);
 
     const fetchOrganizations = async () => {
         try {
-            if (!window.ethereum) {
-                alert("Please install MetaMask to use this feature.");
+            if (!contract) {
+                console.error("Contract not initialized");
                 return;
             }
-            
-            const provider = new ethers.BrowserProvider(window.ethereum);
-            const contract = new ethers.Contract(MARKETPLACE_ADDRESS, MARKETPLACE_ABI, provider);
-            
-            const accounts = await provider.send("eth_requestAccounts", []);
-            const signer = await provider.getSigner(accounts[0]);
 
             const orgs = await contract.queryFilter("OrganizationRegistered");
             const formattedOrgs = orgs.map(event => ({
@@ -39,15 +36,17 @@ const Marketplace = () => {
     };
 
     return (
-        <div className="p-6 max-w-3xl mx-auto bg-white shadow-md rounded-lg">
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-md mb-4">Make a Claim</button>
-            <h2 className="text-xl font-semibold mb-4">Organizations</h2>
-            {loading ? (
-                <p>Loading organizations...</p>
+        <div className="marketplace-container">
+            <h2 className="title">Organizations</h2>
+            
+            {!walletAddress ? (
+                <p className="error-text">Connect your wallet to view organizations.</p>
+            ) : loading ? (
+                <p className="loading-text">Loading organizations...</p>
             ) : (
-                <ul>
+                <ul className="organization-list">
                     {organizations.map((org, index) => (
-                        <li key={index} className="border p-2 rounded-md mb-2">
+                        <li key={index} className="organization-item">
                             <p><strong>Name:</strong> {org.name}</p>
                             <p><strong>Type:</strong> {org.isBuyer}</p>
                             <p><strong>Address:</strong> {org.address}</p>

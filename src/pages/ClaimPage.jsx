@@ -1,17 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { ethers } from 'ethers';
 import uploadToIPFS from '../utils/ifpsUpload';
-import { MARKETPLACE_ABI,MARKETPLACE_ADDRESS } from "../utils/constants";
+import { Web3Context } from '../hooks/Web3hook';
 import './styles/ClaimPage.css';
 
-import { use } from 'react';
-
 const ClaimPage = () => {
-  const [walletAddress, setWalletAddress] = useState('');
-  const [contract, setContract] = useState(null);
-  const [error, setError] = useState('');
-  const [isRegistered, setIsRegistered] = useState(false);
-  const [isBuyer, setIsBuyer] = useState(false);
+  const { walletAddress, contract, connectWallet, organization, error } = useContext(Web3Context); // Use global Web3 state
+
   const [formData, setFormData] = useState({
     coordinatesX: '',
     coordinatesY: '',
@@ -21,35 +16,7 @@ const ClaimPage = () => {
     projectName: '',
     photos: []
   });
-
-  // Connect wallet and check registration status
-  
-  const connectWallet = async () => {
-    try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      await provider.send("eth_requestAccounts", []);
-      const signer = await provider.getSigner();
-      const address = await signer.getAddress();
-      const contract = new ethers.Contract(MARKETPLACE_ADDRESS, MARKETPLACE_ABI, signer);
-      setContract(contract);
-      console.log("address",address);
-      setWalletAddress(address);
-      
-      // Check registration status
-      const org = await contract.getOrganization(address);
-      console.log(org);
-      setIsRegistered(org.isRegistered);
-      setIsBuyer(org.isBuyer);
-    } catch (error) {
-      console.error("Error connecting wallet:", error);
-      setError('Failed to connect wallet. Please make sure MetaMask is installed.');
-    }
-  };
-
-  useEffect(() => {
-    connectWallet();
-   
-  }, []);
+  const [localError, setLocalError] = useState('');
 
   // Handle form input changes
   const handleInputChange = (e) => {
@@ -58,7 +25,6 @@ const ClaimPage = () => {
       [e.target.name]: e.target.value
     });
   };
-
   // Handle file upload
   const handleFileUpload = async (e) => {
     try {
@@ -66,28 +32,25 @@ const ClaimPage = () => {
       const cids = await Promise.all(files.map(file => uploadToIPFS(file)));
       setFormData({ ...formData, photos: cids });
     } catch (error) {
-      setError('Error uploading files to IPFS');
+      setLocalError('Error uploading files to IPFS');
     }
   };
 
   // Submit claim
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    
+    setLocalError('');
+
     try {
-      if (!isRegistered) {
-        throw new Error('Organization not registered');
-      }
-      if (isBuyer) {
-        throw new Error('Buyers cannot submit claims');
-      }
+      if (!contract) throw new Error("Contract not initialized. Try reconnecting the wallet.");
+      if (!organization?.isRegistered) throw new Error("Organization not registered.");
+      if (organization?.isBuyer) throw new Error("Buyers cannot submit claims.");
 
       const tx = await contract.submitClaim(
         parseInt(formData.coordinatesX),
         parseInt(formData.coordinatesY),
         formData.acres,
-        ethers.parseUnits(formData.demandedTokens, 18), // Assuming 18 decimals
+        ethers.parseUnits(String(formData.demandedTokens), 18), // Ensure it's a string
         formData.projectDetails,
         formData.projectName,
         formData.photos
@@ -96,14 +59,14 @@ const ClaimPage = () => {
       alert('Claim submitted successfully!');
     } catch (error) {
       console.error('Claim submission error:', error);
-      setError(error.reason || error.message);
+      setLocalError(error.reason || error.message);
     }
   };
 
   return (
     <div className="claim-page">
       <h2>Submit Carbon Credit Claim</h2>
-      
+
       {!walletAddress ? (
         <button className="connect-wallet" onClick={connectWallet}>
           Connect Wallet to Submit Claim
@@ -111,8 +74,8 @@ const ClaimPage = () => {
       ) : (
         <div className="wallet-info">
           <p>Connected as: {walletAddress}</p>
-          {!isRegistered && <p className="error">Organization not registered</p>}
-          {isBuyer && <p className="error">Buyer accounts cannot submit claims</p>}
+          {!organization?.isRegistered && <p className="error">Organization not registered</p>}
+          {organization?.isBuyer && <p className="error">Buyer accounts cannot submit claims</p>}
         </div>
       )}
 
@@ -201,12 +164,12 @@ const ClaimPage = () => {
           </div>
         </div>
 
-        {error && <div className="error">{error}</div>}
+        {localError && <div className="error">{localError}</div>}
 
         <button 
           type="submit" 
           className="submit-button"
-          disabled={!walletAddress || !isRegistered || isBuyer}
+          disabled={!walletAddress || !organization?.isRegistered || organization?.isBuyer}
         >
           Submit Claim
         </button>
