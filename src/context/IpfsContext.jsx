@@ -3,7 +3,7 @@ import axios from "axios";
 
 const IPFSContext = createContext();
 
-const API_URL = "http://localhost:5000";
+const API_URL = "http://localhost:6969";//'o'
 
 export const IPFSProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(false);
