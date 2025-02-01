@@ -7,6 +7,7 @@ import OrganisationMarketplace from "./pages/CarbonCredit/MarketPlace";
 import OrganisationClaimPage from "./pages/CarbonCredit/ClaimPage";
 import Navbar from "./components/Navbar";
 import RegisterPage from "./pages/RegisterPage";
+import UserRegisterPage from "./pages/EcoCoin/Registerpage";
 
 
 function App() {
@@ -14,27 +15,21 @@ function App() {
     <Router>
 
       {/* Organisation Routes - Wrapped in Web3Provider */}
-      <Web3Provider>
+      {/* <UserWeb3Provider>
         <Navbar />
         <Routes>
           <Route path="organisation/register" element={<OrganisationRegisterPage />} />
           <Route path="organisation/marketplace" element={<OrganisationMarketplace />} />
           <Route path="organisation/claim" element={<OrganisationClaimPage />} />
         </Routes>
-      </Web3Provider>
+      </UserWeb3Provider> */}
 
       {/* User Routes - Wrapped in UserWeb3Provider */}
-      {/* <UserWeb3Provider>
-      <Navbar />
+      <UserWeb3Provider>
         <Routes>
-          <Route path="user/register" element={<UserRegisterPage />} />
-          <Route path="user/marketplace" element={<UserMarketplace />} />
-          <Route path="user/claim" element={<UserClaimPage />} />
-          <Route path="organisation/register" element={<OrganisationRegisterPage />} />
-          <Route path="organisation/marketplace" element={<OrganisationMarketplace />} />
-          <Route path="organisation/claim" element={<OrganisationClaimPage />} />
+          <Route path="user/register" element={<UserRegisterPage/>} />
         </Routes>
-      </UserWeb3Provider> */}
+      </UserWeb3Provider>
 
       {/* Common Routes */}
       <Routes>

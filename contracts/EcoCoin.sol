@@ -26,7 +26,7 @@ contract EcoCoinMarketplace is ReentrancyGuard, Ownable {
 
     struct User {
         string name;
-        string profilePhotoIpfsHash;
+        string photoIpfsHash;
         uint256 totalClaimsSubmitted;
         uint256 successfulClaims;
         uint256 totalVotesCast;
@@ -74,7 +74,7 @@ contract EcoCoinMarketplace is ReentrancyGuard, Ownable {
     mapping(address => uint256) public lastClaimTime;
     uint256 public claimCounter;
     
-    event UserRegistered(address indexed userAddress, string name);
+    event UserRegistered(address indexed userAddress, string name, string photoIpfsHash);
     event ClaimSubmitted(uint256 indexed claimId, address indexed owner, uint256 startTime, uint256 endTime);
     event VoteCast(uint256 indexed claimId, address indexed voter);
     event ClaimResolved(uint256 indexed claimId, ClaimStatus status, uint256 forVotes, uint256 againstVotes);
@@ -89,13 +89,13 @@ contract EcoCoinMarketplace is ReentrancyGuard, Ownable {
 
     function registerUser(
         string memory _name,
-        string memory _profilePhotoIpfsHash
+        string memory _photoIpfsHash
     ) external {
         require(!users[msg.sender].isRegistered, "User already registered");
         
         users[msg.sender] = User({
             name: _name,
-            profilePhotoIpfsHash: _profilePhotoIpfsHash,
+            photoIpfsHash:_photoIpfsHash,
             totalClaimsSubmitted: 0,
             successfulClaims: 0,
             totalVotesCast: 0,
@@ -104,7 +104,7 @@ contract EcoCoinMarketplace is ReentrancyGuard, Ownable {
             reputationScore: 100 // Starting reputation score
         });
         
-        emit UserRegistered(msg.sender, _name);
+        emit UserRegistered(msg.sender, _name,_photoIpfsHash);
     }
     
     function submitClaim(
