@@ -26,9 +26,6 @@ export default function RegisterPage() {
         setError('Failed to connect wallet. Please make sure MetaMask is installed.');
       }
     };
-  
-    
-  
     const handleSubmit = async (e) => {
       e.preventDefault();
       setError('');
