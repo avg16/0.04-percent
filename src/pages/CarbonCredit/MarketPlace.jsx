@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Web3Context } from "../../hooks/Web3hook";
-import "./styles/Marketplace.css"; 
+import { useIPFS } from "../../context/IpfsContext"; // Import the IPFS context hook
+import "./styles/Marketplace.css";
 
 const OrganisationMarketplace = () => {
     const { walletAddress, contract } = useContext(Web3Context); // Use global Web3 state
+    const { getFile, isLoading, error } = useIPFS(); // Use IPFS hook to get images
     const [organizations, setOrganizations] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -21,10 +23,19 @@ const OrganisationMarketplace = () => {
             }
 
             const orgs = await contract.queryFilter("OrganizationRegistered");
-            const formattedOrgs = orgs.map(event => ({
-                address: event.args.orgAddress,
-                name: event.args.name,
-            }));
+
+            // Format the organizations array to include the correct properties
+            const formattedOrgs = await Promise.all(
+                orgs.map(async (event) => {
+                    const photoUrl = await getFile(event.args.photoIpfsHash); // Get image URL using IPFS CID
+                    return {
+                        address: event.args.orgAddress,
+                        name: event.args.name,
+                        photoUrl, // Store the image URL here
+                        balance: event.args.balance || 0,
+                    };
+                })
+            );
 
             setOrganizations(formattedOrgs);
             setLoading(false);
@@ -37,7 +48,7 @@ const OrganisationMarketplace = () => {
     return (
         <div className="marketplace-container">
             <h2 className="title">Organizations</h2>
-            
+
             {!walletAddress ? (
                 <p className="error-text">Connect your wallet to view organizations.</p>
             ) : loading ? (
@@ -49,6 +60,16 @@ const OrganisationMarketplace = () => {
                             <p><strong>Name:</strong> {org.name}</p>
                             <p><strong>Address:</strong> {org.address}</p>
                             <p><strong>Balance:</strong> {org.balance ? org.balance : "None"}</p>
+                            {org.photoUrl && (
+                                <div>
+                                    <img
+                                        src={org.photoUrl}
+                                        alt={org.name}
+                                        className="organization-image"
+                                        style={{ width: "150px", height: "150px", objectFit: "cover" }} // Add size here
+                                    />
+                                </div>
+                            )}
                         </li>
                     ))}
                 </ul>

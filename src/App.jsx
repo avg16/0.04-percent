@@ -6,7 +6,7 @@ import OrganisationRegisterPage from "./pages/CarbonCredit/Registerpage";
 import OrganisationMarketplace from "./pages/CarbonCredit/MarketPlace";
 import OrganisationClaimPage from "./pages/CarbonCredit/ClaimPage";
 import Navbar from "./components/Navbar";
-import RegisterPage from "./pages/Registerpage";
+import RegisterPage from "./pages/RegisterPage";
 
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
 
       {/* Organisation Routes - Wrapped in Web3Provider */}
       <Web3Provider>
-      <Navbar />
+        <Navbar />
         <Routes>
           <Route path="organisation/register" element={<OrganisationRegisterPage />} />
           <Route path="organisation/marketplace" element={<OrganisationMarketplace />} />

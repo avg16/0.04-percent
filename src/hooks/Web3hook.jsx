@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { ethers } from "ethers";
-import {ORGANISATION_MARKETPLACE_ADDRESS, ORGANISATION_MARKETPLACE_ABI} from "../utils/constants";
+import { ORGANISATION_MARKETPLACE_ADDRESS, ORGANISATION_MARKETPLACE_ABI } from "../utils/constants";
 
 export const Web3Context = createContext();
 
@@ -12,6 +12,7 @@ export const Web3Provider = ({ children }) => {
   const [organization, setOrganization] = useState(null);  // Store organization details
   const [error, setError] = useState("");
 
+  // Connect wallet function
   const connectWallet = async () => {
     try {
       if (!window.ethereum) {
@@ -25,14 +26,18 @@ export const Web3Provider = ({ children }) => {
       const signerInstance = await providerInstance.getSigner();
       const address = await signerInstance.getAddress();
 
-      const contractInstance = new ethers.Contract(ORGANISATION_MARKETPLACE_ADDRESS, ORGANISATION_MARKETPLACE_ABI, signerInstance);
+      const contractInstance = new ethers.Contract(
+        ORGANISATION_MARKETPLACE_ADDRESS,
+        ORGANISATION_MARKETPLACE_ABI,
+        signerInstance
+      );
 
       setProvider(providerInstance);
       setSigner(signerInstance);
       setWalletAddress(address);
       setContract(contractInstance);
 
-      // 🔹 Fetch organization details
+      // Fetch organization details
       const org = await contractInstance.getOrganization(address);
       console.log("Organization details:", org);
 
@@ -42,11 +47,20 @@ export const Web3Provider = ({ children }) => {
         netEmission: org.netEmission,
         photoIpfsHash: org.photoIpfsHash,
       });
-
     } catch (error) {
       console.error("Wallet connection error:", error);
       setError("Failed to connect wallet.");
     }
+  };
+
+  // Disconnect wallet function
+  const disconnectWallet = () => {
+    setWalletAddress("");
+    setProvider(null);
+    setSigner(null);
+    setContract(null);
+    setOrganization(null); // Reset organization details
+    setError(""); // Clear any existing errors
   };
 
   useEffect(() => {
@@ -56,7 +70,7 @@ export const Web3Provider = ({ children }) => {
   }, []);
 
   return (
-    <Web3Context.Provider value={{ walletAddress, provider, signer, contract, organization, connectWallet, error }}>
+    <Web3Context.Provider value={{ walletAddress, provider, signer, contract, organization, connectWallet, disconnectWallet, error }}>
       {children}
     </Web3Context.Provider>
   );
