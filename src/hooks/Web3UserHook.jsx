@@ -2,9 +2,9 @@ import React, { createContext, useState, useEffect } from "react";
 import { ethers } from "ethers";
 import {ORGANISATION_MARKETPLACE_ADDRESS, ORGANISATION_MARKETPLACE_ABI} from "../utils/constants";
 
-export const Web3Context = createContext();
+export const UserWeb3Context = createContext();
 
-export const Web3Provider = ({ children }) => {
+export const UserWeb3Provider = ({ children }) => {
   const [walletAddress, setWalletAddress] = useState("");
   const [provider, setProvider] = useState(null);
   const [signer, setSigner] = useState(null);
@@ -25,7 +25,7 @@ export const Web3Provider = ({ children }) => {
       const signerInstance = await providerInstance.getSigner();
       const address = await signerInstance.getAddress();
 
-      const contractInstance = new ethers.Contract(ORGANISATION_MARKETPLACE_ADDRESS, ORGANISATION_MARKETPLACE_ABI, signerInstance);
+      const contractInstance = new ethers.Contract(ORGANISATION_MARKETPLACE_ADDRESS,ORGANISATION_MARKETPLACE_ABI, signerInstance);
 
       setProvider(providerInstance);
       setSigner(signerInstance);
@@ -56,8 +56,8 @@ export const Web3Provider = ({ children }) => {
   }, []);
 
   return (
-    <Web3Context.Provider value={{ walletAddress, provider, signer, contract, organization, connectWallet, error }}>
+    <UserWeb3Context.Provider value={{ walletAddress, provider, signer, contract, organization, connectWallet, error }}>
       {children}
-    </Web3Context.Provider>
+    </UserWeb3Context.Provider>
   );
 };
