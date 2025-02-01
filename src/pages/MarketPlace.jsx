@@ -24,7 +24,6 @@ const Marketplace = () => {
             const formattedOrgs = orgs.map(event => ({
                 address: event.args.orgAddress,
                 name: event.args.name,
-                isBuyer: event.args.isBuyer ? "Buyer" : "Seller"
             }));
 
             setOrganizations(formattedOrgs);
@@ -48,7 +47,6 @@ const Marketplace = () => {
                     {organizations.map((org, index) => (
                         <li key={index} className="organization-item">
                             <p><strong>Name:</strong> {org.name}</p>
-                            <p><strong>Type:</strong> {org.isBuyer}</p>
                             <p><strong>Address:</strong> {org.address}</p>
                             <p><strong>Balance:</strong> {org.balance ? org.balance : "None"}</p>
                         </li>

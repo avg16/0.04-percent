@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 contract CarbonToken is ERC20, Ownable {
     constructor(address initialOwner) 
         ERC20("Carbon Credit", "CC")
-        Ownable(initialOwner) // Pass initial owner to Ownable constructor
+        Ownable(initialOwner)
     {}
     
     function mint(address to, uint256 amount) external onlyOwner {
@@ -23,7 +23,6 @@ contract CarbonMarketplace is ReentrancyGuard, Ownable {
     
     struct Organization {
         string name;
-        bool isBuyer;
         uint256 netEmission;
         string photoIpfsHash;
         bool isRegistered;
@@ -37,6 +36,7 @@ contract CarbonMarketplace is ReentrancyGuard, Ownable {
         int256 coordinatesY;
         uint256 acres;
         uint256 demandedTokens;
+        uint256 eligibleTokens; // Added to track approved tokens
         string projectDetails;
         string projectName;
         uint256 timestamp;
@@ -50,20 +50,19 @@ contract CarbonMarketplace is ReentrancyGuard, Ownable {
     mapping(uint256 => Claim) public claims;
     uint256 public claimCounter;
     
-    event OrganizationRegistered(address indexed orgAddress, string name, bool isBuyer);
+    event OrganizationRegistered(address indexed orgAddress, string name);
     event ClaimSubmitted(uint256 indexed claimId, address indexed seller);
-    event ClaimStatusUpdated(uint256 indexed claimId, ClaimStatus status);
+    event ClaimStatusUpdated(uint256 indexed claimId, ClaimStatus status, uint256 eligibleTokens);
     event CreditsPurchased(address indexed buyer, address indexed seller, uint256 amount);
     
     constructor(address _carbonToken, address initialOwner) 
-        Ownable(initialOwner) // Pass initial owner to Ownable constructor
+        Ownable(initialOwner)
     {
         carbonToken = CarbonToken(_carbonToken);
     }
     
     function registerOrganization(
         string memory _name,
-        bool _isBuyer,
         uint256 _netEmission,
         string memory _photoIpfsHash
     ) external {
@@ -71,14 +70,13 @@ contract CarbonMarketplace is ReentrancyGuard, Ownable {
         
         organizations[msg.sender] = Organization({
             name: _name,
-            isBuyer: _isBuyer,
             netEmission: _netEmission,
             photoIpfsHash: _photoIpfsHash,
             isRegistered: true,
             balance: 0
         });
         
-        emit OrganizationRegistered(msg.sender, _name, _isBuyer);
+        emit OrganizationRegistered(msg.sender, _name);
     }
     
     function submitClaim(
@@ -91,7 +89,6 @@ contract CarbonMarketplace is ReentrancyGuard, Ownable {
         string[] memory _photoIpfsHashes
     ) external {
         require(organizations[msg.sender].isRegistered, "Not registered");
-        require(!organizations[msg.sender].isBuyer, "Buyers cannot submit claims");
         
         uint256 claimId = claimCounter++;
         
@@ -102,6 +99,7 @@ contract CarbonMarketplace is ReentrancyGuard, Ownable {
             coordinatesY: _coordinatesY,
             acres: _acres,
             demandedTokens: _demandedTokens,
+            eligibleTokens: 0, // Initialize to 0
             projectDetails: _projectDetails,
             projectName: _projectName,
             timestamp: block.timestamp,
@@ -112,26 +110,32 @@ contract CarbonMarketplace is ReentrancyGuard, Ownable {
         emit ClaimSubmitted(claimId, msg.sender);
     }
     
-    function approveClaim(uint256 _claimId) external onlyOwner {
+    function approveClaim(uint256 _claimId, uint256 _eligibleTokens) external onlyOwner {
         require(claims[_claimId].status == ClaimStatus.Pending, "Invalid claim status");
+        require(_eligibleTokens <= claims[_claimId].demandedTokens, "Eligible tokens cannot exceed demanded tokens");
         
         claims[_claimId].status = ClaimStatus.Approved;
-        carbonToken.mint(claims[_claimId].seller, claims[_claimId].demandedTokens);
-        organizations[claims[_claimId].seller].balance += claims[_claimId].demandedTokens;
+        claims[_claimId].eligibleTokens = _eligibleTokens; // Store the eligible tokens amount
         
-        emit ClaimStatusUpdated(_claimId, ClaimStatus.Approved);
+        // Mint the eligible amount of tokens, not the demanded amount
+        carbonToken.mint(claims[_claimId].seller, _eligibleTokens);
+        organizations[claims[_claimId].seller].balance += _eligibleTokens;
+        
+        emit ClaimStatusUpdated(_claimId, ClaimStatus.Approved, _eligibleTokens);
     }
     
     function declineClaim(uint256 _claimId) external onlyOwner {
         require(claims[_claimId].status == ClaimStatus.Pending, "Invalid claim status");
         
         claims[_claimId].status = ClaimStatus.Declined;
-        emit ClaimStatusUpdated(_claimId, ClaimStatus.Declined);
+        claims[_claimId].eligibleTokens = 0; // Explicitly set eligible tokens to 0
+        
+        emit ClaimStatusUpdated(_claimId, ClaimStatus.Declined, 0);
     }
     
     function purchaseCredits(address _seller, uint256 _amount) external nonReentrant {
         require(organizations[msg.sender].isRegistered, "Buyer not registered");
-        require(organizations[msg.sender].isBuyer, "Only buyers can purchase");
+        require(organizations[_seller].isRegistered, "Seller not registered");
         require(organizations[_seller].balance >= _amount, "Insufficient seller balance");
         
         organizations[_seller].balance -= _amount;

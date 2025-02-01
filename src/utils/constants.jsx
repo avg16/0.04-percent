@@ -1,10 +1,15 @@
-export const MARKETPLACE_ADDRESS = "0x93F106F42a8565665b86b323336ec14750767C86";
+export const MARKETPLACE_ADDRESS = "0xf45b2B21f5aaa73540F52A40AC721B5aADc39dea";
 export const MARKETPLACE_ABI = [
 	{
 		"inputs": [
 			{
 				"internalType": "uint256",
 				"name": "_claimId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_eligibleTokens",
 				"type": "uint256"
 			}
 		],
@@ -65,6 +70,12 @@ export const MARKETPLACE_ABI = [
 				"internalType": "enum CarbonMarketplace.ClaimStatus",
 				"name": "status",
 				"type": "uint8"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "eligibleTokens",
+				"type": "uint256"
 			}
 		],
 		"name": "ClaimStatusUpdated",
@@ -141,12 +152,6 @@ export const MARKETPLACE_ABI = [
 				"internalType": "string",
 				"name": "name",
 				"type": "string"
-			},
-			{
-				"indexed": false,
-				"internalType": "bool",
-				"name": "isBuyer",
-				"type": "bool"
 			}
 		],
 		"name": "OrganizationRegistered",
@@ -195,11 +200,6 @@ export const MARKETPLACE_ABI = [
 				"internalType": "string",
 				"name": "_name",
 				"type": "string"
-			},
-			{
-				"internalType": "bool",
-				"name": "_isBuyer",
-				"type": "bool"
 			},
 			{
 				"internalType": "uint256",
@@ -347,6 +347,11 @@ export const MARKETPLACE_ABI = [
 				"type": "uint256"
 			},
 			{
+				"internalType": "uint256",
+				"name": "eligibleTokens",
+				"type": "uint256"
+			},
+			{
 				"internalType": "string",
 				"name": "projectDetails",
 				"type": "string"
@@ -413,6 +418,11 @@ export const MARKETPLACE_ABI = [
 						"type": "uint256"
 					},
 					{
+						"internalType": "uint256",
+						"name": "eligibleTokens",
+						"type": "uint256"
+					},
+					{
 						"internalType": "string",
 						"name": "projectDetails",
 						"type": "string"
@@ -464,11 +474,6 @@ export const MARKETPLACE_ABI = [
 						"type": "string"
 					},
 					{
-						"internalType": "bool",
-						"name": "isBuyer",
-						"type": "bool"
-					},
-					{
 						"internalType": "uint256",
 						"name": "netEmission",
 						"type": "uint256"
@@ -511,11 +516,6 @@ export const MARKETPLACE_ABI = [
 				"internalType": "string",
 				"name": "name",
 				"type": "string"
-			},
-			{
-				"internalType": "bool",
-				"name": "isBuyer",
-				"type": "bool"
 			},
 			{
 				"internalType": "uint256",

@@ -44,7 +44,6 @@ const ClaimPage = () => {
     try {
       if (!contract) throw new Error("Contract not initialized. Try reconnecting the wallet.");
       if (!organization?.isRegistered) throw new Error("Organization not registered.");
-      if (organization?.isBuyer) throw new Error("Buyers cannot submit claims.");
 
       const tx = await contract.submitClaim(
         parseInt(formData.coordinatesX),
@@ -55,8 +54,18 @@ const ClaimPage = () => {
         formData.projectName,
         formData.photos
       );
-      await tx.wait();
-      alert('Claim submitted successfully!');
+
+      const receipt = await tx.wait(); // Wait for transaction confirmation
+
+        // 🔹 Extract the claim ID from the event
+        const event = receipt.logs.find(log => log.fragment.name === "ClaimSubmitted");
+        if (event) {
+            const claimId = event.args.claimId.toString();
+            console.log("Claim submitted with ID:", claimId);
+            alert(`Claim submitted successfully! Claim ID: ${claimId}`);
+        } else {
+            console.warn("ClaimSubmitted event not found!");
+        }
     } catch (error) {
       console.error('Claim submission error:', error);
       setLocalError(error.reason || error.message);
@@ -74,8 +83,6 @@ const ClaimPage = () => {
       ) : (
         <div className="wallet-info">
           <p>Connected as: {walletAddress}</p>
-          {!organization?.isRegistered && <p className="error">Organization not registered</p>}
-          {organization?.isBuyer && <p className="error">Buyer accounts cannot submit claims</p>}
         </div>
       )}
 
@@ -169,7 +176,6 @@ const ClaimPage = () => {
         <button 
           type="submit" 
           className="submit-button"
-          disabled={!walletAddress || !organization?.isRegistered || organization?.isBuyer}
         >
           Submit Claim
         </button>

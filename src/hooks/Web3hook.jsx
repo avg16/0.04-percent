@@ -39,7 +39,6 @@ export const Web3Provider = ({ children }) => {
       setOrganization({
         name: org.name,
         isRegistered: org.isRegistered,
-        isBuyer: org.isBuyer,
         netEmission: org.netEmission,
         photoIpfsHash: org.photoIpfsHash,
       });

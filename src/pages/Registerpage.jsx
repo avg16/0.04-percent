@@ -8,7 +8,6 @@ export default function RegisterPage() {
   console.log("contract",contract);
   const [formData, setFormData] = useState({
     name: "",
-    isBuyer: false,
     netEmission: "",
     photoIpfsHash: null,
   });
@@ -32,7 +31,6 @@ export default function RegisterPage() {
       // Register organization
       const tx = await contract.registerOrganization(
         formData.name,
-        formData.isBuyer,
         formData.netEmission,
         photoIpfsHash
       );
@@ -76,19 +74,6 @@ export default function RegisterPage() {
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               />
             </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Organization Type</label>
-              <select
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                value={formData.isBuyer}
-                onChange={(e) => setFormData({ ...formData, isBuyer: e.target.value === "true" })}
-              >
-                <option value="false">Seller</option>
-                <option value="true">Buyer</option>
-              </select>
-            </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700">Net Emission (tons CO2)</label>
               <input
