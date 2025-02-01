@@ -1,10 +1,10 @@
 import { useState, useContext } from 'react';
 import { ethers } from 'ethers';
-import uploadToIPFS from '../utils/ifpsUpload';
-import { Web3Context } from '../hooks/Web3hook';
+import uploadToIPFS from '../../utils/ifpsUpload';
+import { Web3Context } from '../../hooks/Web3hook';
 import './styles/ClaimPage.css';
 
-const ClaimPage = () => {
+const OrganisationClaimPage = () => {
   const { walletAddress, contract, connectWallet, organization, error } = useContext(Web3Context); // Use global Web3 state
 
   const [formData, setFormData] = useState({
@@ -184,4 +184,4 @@ const ClaimPage = () => {
   );
 };
 
-export default ClaimPage;
+export default OrganisationClaimPage;

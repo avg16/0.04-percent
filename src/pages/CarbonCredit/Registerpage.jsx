@@ -1,8 +1,8 @@
 import React, { useState, useContext } from "react";
-import { Web3Context } from "../hooks/Web3hook";
-import uploadToIPFS from "../utils/ifpsUpload";
+import { Web3Context } from "../../hooks/Web3hook";
+import uploadToIPFS from "../../utils/ifpsUpload";
 
-export default function RegisterPage() {
+export default function OrganisationRegisterPage() {
   const { walletAddress, contract, connectWallet, error } = useContext(Web3Context); // Use global Web3 state
   console.log("walletAddress",walletAddress);
   console.log("contract",contract);

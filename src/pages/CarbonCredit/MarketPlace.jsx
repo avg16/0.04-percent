@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Web3Context } from "../hooks/Web3hook";
+import { Web3Context } from "../../hooks/Web3hook";
 import "./styles/Marketplace.css"; // Import CSS file
 
-const Marketplace = () => {
+const OrganisationMarketplace = () => {
     const { walletAddress, contract } = useContext(Web3Context); // Use global Web3 state
     const [organizations, setOrganizations] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -57,4 +57,4 @@ const Marketplace = () => {
     );
 };
 
-export default Marketplace;
+export default OrganisationMarketplace;

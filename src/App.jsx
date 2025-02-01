@@ -1,9 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Web3Provider } from "./hooks/Web3hook";
-import Registerpage from "./pages/Registerpage";
-import Marketplace from "./pages/MarketPlace";
-import ClaimPage from "./pages/ClaimPage";
+import OrganisationRegisterPage from "./pages/CarbonCredit/Registerpage";
+import OrganisationMarketplace from "./pages/CarbonCredit/MarketPlace";
+import OrganisationClaimPage from "./pages/CarbonCredit/ClaimPage";
 import Navbar from "./components/Navbar";
 
 function App() {
@@ -12,9 +12,10 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
-          <Route path="/register" element={<Registerpage />} />
-          <Route path="/marketplace" element={<Marketplace />} />
-          <Route path="/claim" element={<ClaimPage />} />
+
+          <Route path="organisation/register" element={<OrganisationRegisterPage />} />
+          <Route path="organisation/marketplace" element={<OrganisationMarketplace />} />
+          <Route path="organisation/claim" element={<OrganisationClaimPage />} />
         </Routes>
       </Router>
     </Web3Provider>
