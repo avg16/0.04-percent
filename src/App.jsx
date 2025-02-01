@@ -2,11 +2,11 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 import Registerpage from './pages/Registerpage';
+import Marketplace from './pages/MarketPlace';
 function App() {
   return (
     <Router>
       <div>
-        {/* Navigation links */}
         <nav>
           <ul>
             <li>
@@ -20,11 +20,9 @@ function App() {
             </li>
           </ul>
         </nav>
-
-        {/* Define Routes */}
         <Routes>
           <Route path="/register" element={<Registerpage />} />
-          <Route path="/about" element={<div>About</div>} />
+          <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/login" element={<div>Dashboard</div>} />
         </Routes>
       </div>

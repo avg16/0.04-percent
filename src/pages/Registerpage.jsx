@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { ethers } from "ethers";
 import { MARKETPLACE_ABI,MARKETPLACE_ADDRESS } from "../utils/constants";
+import uploadToIPFS from "../utils/ifpsUpload";
 export default function RegisterPage() {
     const [walletAddress, setWalletAddress] = useState('');
     const [formData, setFormData] = useState({
@@ -26,26 +27,7 @@ export default function RegisterPage() {
       }
     };
   
-    const uploadToIPFS = async (file) => {
-      try {
-        const formData = new FormData();
-        formData.append('file', file);
-        
-        const response = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer YOUR_PINATA_JWT`, // Replace with your Pinata JWT
-          },
-          body: formData
-        });
-        
-        const data = await response.json();
-        return data.IpfsHash;
-      } catch (error) {
-        console.error('Error uploading to IPFS:', error);
-        throw error;
-      }
-    };
+    
   
     const handleSubmit = async (e) => {
       e.preventDefault();

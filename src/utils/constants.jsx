@@ -1,4 +1,4 @@
-export const MARKETPLACE_ADDRESS = "YOUR_CONTRACT_ADDRESS";
+export const MARKETPLACE_ADDRESS = "0xaFeFA5c52c8E89a059F65a51f16AC6f22E98b226";
 export const MARKETPLACE_ABI = [
 	{
 		"inputs": [
