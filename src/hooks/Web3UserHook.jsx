@@ -28,17 +28,17 @@ export const UserWeb3Provider = ({ children }) => {
       setSigner(signerInstance);
       setWalletAddress(address);
       setContract(contractInstance);
-      // const user = await contractInstance.getUser(address);
-      // setUser({
-      //   name: user.name,
-      //   isRegistered: user.isRegistered,
-      //   totalClaimsSubmitted: user.totalClaimsSubmitted,
-      //   photoIpfsHash: user.profilePhotoIpfsHash,
-      //   totalVotesCast: user.totalVotesCast,
-      //   correctVotes: user.correctVotes,
-      //   reputationScore: user.reputationScore,
-      //   successfulClaims: user.successfulClaims
-      // });
+      const user = await contractInstance.getUser(address);
+      setUser({
+        name: user.name,
+        isRegistered: user.isRegistered,
+        totalClaimsSubmitted: user.totalClaimsSubmitted,
+        photoIpfsHash: user.profilePhotoIpfsHash,
+        totalVotesCast: user.totalVotesCast,
+        correctVotes: user.correctVotes,
+        reputationScore: user.reputationScore,
+        successfulClaims: user.successfulClaims
+      });
     } catch (error) {
       console.error("Wallet connection error:", error);
       setError("Failed to connect wallet.");

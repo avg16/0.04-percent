@@ -20,6 +20,8 @@ contract CarbonToken is ERC20, Ownable {
 // Main Marketplace Contract
 contract CarbonMarketplace is ReentrancyGuard, Ownable {
     CarbonToken public carbonToken;
+     uint256 public constant MOCK_CARBON_PRICE = 50; // Mock price per carbon credit in CC tokens
+
     
     struct Organization {
         string name;
@@ -33,8 +35,8 @@ contract CarbonMarketplace is ReentrancyGuard, Ownable {
     struct Claim {
         uint256 id;
         address seller;
-        int256 coordinatesX;
-        int256 coordinatesY;
+        uint256 coordinatesX;
+        uint256 coordinatesY;
         uint256 acres;
         uint256 demandedTokens;
         uint256 eligibleTokens; // Added to track approved tokens
@@ -57,10 +59,11 @@ contract CarbonMarketplace is ReentrancyGuard, Ownable {
     event ClaimStatusUpdated(uint256 indexed claimId, ClaimStatus status, uint256 eligibleTokens);
     event CreditsPurchased(address indexed buyer, address indexed seller, uint256 amount);
     
-    constructor(address _carbonToken, address initialOwner) 
+    constructor(address initialOwner) 
         Ownable(initialOwner)
     {
-        carbonToken = CarbonToken(_carbonToken);
+        // carbonToken = CarbonToken(_carbonToken);
+        carbonToken = new CarbonToken(address(this));
     }
     
     function registerOrganization(
@@ -76,7 +79,7 @@ contract CarbonMarketplace is ReentrancyGuard, Ownable {
             photoIpfsHash: _photoIpfsHash,
             isRegistered: true,
             balance: 0,
-            wallet: 100000
+            wallet: 10000
         });
         
         emit OrganizationRegistered(msg.sender, _name, _photoIpfsHash);
@@ -124,7 +127,6 @@ contract CarbonMarketplace is ReentrancyGuard, Ownable {
         // Mint the eligible amount of tokens, not the demanded amount
         carbonToken.mint(claims[_claimId].seller, _eligibleTokens);
         organizations[claims[_claimId].seller].balance += _eligibleTokens;
-        
         emit ClaimStatusUpdated(_claimId, ClaimStatus.Approved, _eligibleTokens);
     }
     
@@ -141,6 +143,12 @@ contract CarbonMarketplace is ReentrancyGuard, Ownable {
         require(organizations[msg.sender].isRegistered, "Buyer not registered");
         require(organizations[_seller].isRegistered, "Seller not registered");
         require(organizations[_seller].balance >= _amount, "Insufficient seller balance");
+        uint256 totalCost = _amount * MOCK_CARBON_PRICE;
+        require(organizations[msg.sender].wallet >= totalCost, "Insufficient funds");
+        organizations[_seller].balance -= _amount;
+        organizations[msg.sender].wallet -= totalCost;
+        organizations[_seller].wallet += totalCost;
+
         
         organizations[_seller].balance -= _amount;
         carbonToken.transferFrom(msg.sender, _seller, _amount);
@@ -155,4 +163,13 @@ contract CarbonMarketplace is ReentrancyGuard, Ownable {
     function getClaim(uint256 _claimId) external view returns (Claim memory) {
         return claims[_claimId];
     }
+
+    function getBalance(address user) external view returns(uint256){
+        return carbonToken.balanceOf(user);
+    }
+
+    function getCarbonPrice() external pure returns (uint256) {
+        return MOCK_CARBON_PRICE;
+    }
+
 }

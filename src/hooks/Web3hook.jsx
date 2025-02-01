@@ -39,7 +39,7 @@ export const Web3Provider = ({ children }) => {
 
       // Fetch organization details
       const org = await contractInstance.getOrganization(address);
-      console.log("Organization details:", org);
+      console.log("Organization detail:", org);
 
       setOrganization({
         name: org.name,
