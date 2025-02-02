@@ -4,22 +4,16 @@
 <br />
 <div align="center">
   <a href="https://github.com/IronJam11/0.04-percent">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img width="250" alt="Screenshot 2025-02-02 at 05 58 41" src="https://github.com/user-attachments/assets/38360c0b-3e4b-4a3c-a0ca-d906abaf5ab4" />
   </a>
 
-<h3 align="center">project_title</h3>
+<h3 align="center">0.04%</h3>
 
   <p align="center">
-    project_description
-    <br />
-    <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
-    <br />
+    Decentralized Carbon Market
     <br />
     <a href="https://github.com/github_username/repo_name">View Demo</a>
     &middot;
-    <a href="https://github.com/github_username/repo_name/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
-    &middot;
-    <a href="https://github.com/github_username/repo_name/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
   </p>
 </div>
 
@@ -45,9 +39,7 @@
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -56,9 +48,15 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+The centralized carbon credit market suffers from inefficiencies, including lack of transparency, high costs, price manipulation, and slow verification processes, which hinder small-scale reforestation developers and create uncertainty for investors. Our project aims to solve these issues by decentralizing the carbon credit market using blockchain and AI.
 
-Here's a blank template to get started. To avoid retyping too much info, do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`, `project_license`
+We introduce Carbon Coin, an ERC-20 token, to create a transparent marketplace where developers submit reforestation project details. Using satellite imaging and NDVI (Normalized Difference Vegetation Index), we verify project legitimacy and calculate carbon credits. By comparing imagery from the start of the project to the date of the transaction, we can accurately assess the carbon reduction. NDVI helps measure vegetation quality, ensuring that the credits reflect genuine environmental impact.
+
+Through machine learning models, we automate project verification, and smart contracts mint Carbon Coins, reducing middlemen, preventing manipulation, and providing standardized pricing. The decentralized ledger ensures transparency, eliminating issues like double counting and fraud, giving investors confidence in the integrity of the credits.
+
+By combining blockchain, AI, and satellite technology, we’re creating a more efficient, fair, and impactful carbon credit market, driving meaningful action in the fight against climate change.
+
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -66,7 +64,7 @@ Here's a blank template to get started. To avoid retyping too much info, do a se
 
 ### Built With
 
-* [![Next][Next.js]][Next-url]
+* [![Node][Node.js]][Node-url]
 * [![React][React.js]][React-url]
 * [![Vue][Vue.js]][Vue-url]
 * [![Angular][Angular.io]][Angular-url]
