@@ -64,13 +64,13 @@ By combining blockchain, AI, and satellite technology, we’re creating a more e
 
 ### Built With
 
-* [![Node][Node.js]][Node-url]
-* [![React][React.js]][React-url]
-* [![Solidity][Solidity-lang]][Solidity-url]
-* [![React][React.js]][React-url]
-* [![Ultralytics][Ultralytics-url]][Ultralytics-url]
-* [![TensorFlow][TensorFlow-logo]][TensorFlow-url]
-* [![Ethereum][Ethereum-logo]][Ethereum-url]
+* Solidity
+* React.js
+* TensorFlow
+* Node.js
+* ethers.js
+* OpenCV
+* Tailwind CSS
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -118,27 +118,9 @@ This is an example of how to list things you need to use the software and how to
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
+The centralized carbon credit market suffers from inefficiencies such as a lack of transparency, high intermediation costs, price manipulation, and a slow verification process. Brokers and third-party verifiers inflate costs, making it difficult for small-scale reforestation developers to participate. Additionally, carbon credit prices fluctuate due to regulatory differences and speculative trading, creating uncertainty for investors. Fraud, including double counting of credits, further undermines trust in the system. Our project solves these issues by decentralizing the carbon credit market using blockchain and AI. By introducing an ERC-20 token, Carbon Coin, we create a transparent and accessible marketplace where developers submit reforestation project details, and an DL model verifies their legitimacy. This eliminates middlemen, reduces costs, and ensures credits are issued based on actual carbon reduction. Smart contracts automate the minting of Carbon Coins, preventing manipulation and ensuring a standardized pricing mechanism. The decentralized ledger prevents double counting, giving investors confidence that each credit represents genuine carbon offsetting. By leveraging AI and blockchain, we make the carbon credit market more efficient, fair, and impactful in the fight against climate change. Plus this project holds a huge scope for extension and innovation that couldn't be implemented due to financial and time barriers. From integrating NLP for project document verification to extending the diversity of eco-projects by including Solar Projects and Hydro Projects, this project has an endless domain of innovation and extension which can be achieved with appropriate resources.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
-
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- CONTRIBUTING -->
 ## Contributing
@@ -156,73 +138,5 @@ Don't forget to give the project a star! Thanks again!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Top contributors:
-
-<a href="https://github.com/github_username/repo_name/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=github_username/repo_name" alt="contrib.rocks image" />
-</a>
-
-
-
-<!-- LICENSE -->
-## License
-
-Distributed under the project_license. See `LICENSE.txt` for more information.
-
+Made with ❤️ by team Aloo Bhujia @ Stack2Deep
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- CONTACT -->
-## Contact
-
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
-
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-* []()
-* []()
-* []()
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo_name.svg?style=for-the-badge
-[contributors-url]: https://github.com/github_username/repo_name/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/github_username/repo_name.svg?style=for-the-badge
-[forks-url]: https://github.com/github_username/repo_name/network/members
-[stars-shield]: https://img.shields.io/github/stars/github_username/repo_name.svg?style=for-the-badge
-[stars-url]: https://github.com/github_username/repo_name/stargazers
-[issues-shield]: https://img.shields.io/github/issues/github_username/repo_name.svg?style=for-the-badge
-[issues-url]: https://github.com/github_username/repo_name/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
-[license-url]: https://github.com/github_username/repo_name/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/linkedin_username
-[product-screenshot]: images/screenshot.png
-[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[Next-url]: https://nextjs.org/
-[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[React-url]: https://reactjs.org/
-[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
-[Vue-url]: https://vuejs.org/
-[Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
-[Angular-url]: https://angular.io/
-[Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
-[Svelte-url]: https://svelte.dev/
-[Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
-[Laravel-url]: https://laravel.com
-[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
-[Bootstrap-url]: https://getbootstrap.com
-[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-[JQuery-url]: https://jquery.com 
