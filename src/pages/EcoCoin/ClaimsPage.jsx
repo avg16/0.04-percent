@@ -37,7 +37,7 @@ const ClaimsListingPage = () => {
         if (claim?.status === 0 && claim.endTime) {
           const endTime = parseInt(claim[7].toString(), 10);
           console.log(`Claim ID: ${claim.id}, End Time: ${endTime}, Current Time: ${now}`);
-          
+
           const timeRemaining = endTime - now;
           console.log("Time remaining (in seconds): ", timeRemaining);
 
@@ -59,10 +59,10 @@ const ClaimsListingPage = () => {
       setTimeLeft(newTimeLeft);
     };
 
-    updateTimers(); 
+    updateTimers();
     const interval = setInterval(updateTimers, 1000);
-    return () => clearInterval(interval); 
-}, [claims]);
+    return () => clearInterval(interval);
+  }, [claims]);
 
 
   // Function to get IPFS image
@@ -93,7 +93,7 @@ const ClaimsListingPage = () => {
 
             const photoUrl = await getFile(claim.photoIpfsHash);
             const canVote = await contract.canVote(claimId, walletAddress);
-            
+
             return {
               ...claim,
               id: claimId,
@@ -140,12 +140,12 @@ const ClaimsListingPage = () => {
     const interval = setInterval(() => {
       const now = Math.floor(Date.now() / 1000);
       const newTimeLeft = {};
-      
+
       claims.forEach(claim => {
         if (claim?.status === 0 && claim?.endTime) {
           const endTime = parseInt(claim.endTime.toString());
           const timeRemaining = endTime - now;
-          
+
           // Update timer display
           if (timeRemaining > 0) {
             const minutes = Math.floor(timeRemaining / 60);
@@ -165,7 +165,7 @@ const ClaimsListingPage = () => {
           }
         }
       });
-      
+
       setTimeLeft(newTimeLeft);
     }, 1000);
 
@@ -205,8 +205,8 @@ const ClaimsListingPage = () => {
           <div key={claim.id?.toString()} className="border rounded-lg p-4 bg-white shadow">
             <div className="flex gap-4">
               {claim.photoUrl && (
-                <img 
-                  src={claim.photoUrl} 
+                <img
+                  src={claim.photoUrl}
                   alt={claim.name || 'Claim image'}
                   className="w-32 h-32 object-cover rounded"
                 />

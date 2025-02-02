@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Web3Context } from "../../hooks/Web3hook";
 import { useIPFS } from "../../context/IpfsContext"; // Import the IPFS context hook
-import "./styles/Marketplace.css";
 
 const OrganisationMarketplace = () => {
     const { walletAddress, contract } = useContext(Web3Context); // Use global Web3 state
@@ -46,33 +45,41 @@ const OrganisationMarketplace = () => {
     };
 
     return (
-        <div className="marketplace-container">
-            <h2 className="title">Organizations</h2>
+        <div className="marketplace-container bg-gray-900 min-h-screen text-gray-100 py-8 px-4">
+            <h2 className="text-3xl font-semibold mb-6 text-center">Organizations Marketplace</h2>
 
             {!walletAddress ? (
-                <p className="error-text">Connect your wallet to view organizations.</p>
+                <div className="bg-red-600 text-white p-4 rounded-lg text-center">
+                    Connect your wallet to view organizations.
+                </div>
             ) : loading ? (
-                <p className="loading-text">Loading organizations...</p>
+                <div className="bg-blue-600 text-white p-4 rounded-lg text-center">
+                    Loading organizations...
+                </div>
             ) : (
-                <ul className="organization-list">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {organizations.map((org, index) => (
-                        <li key={index} className="organization-item">
-                            <p><strong>Name:</strong> {org.name}</p>
-                            <p><strong>Address:</strong> {org.address}</p>
-                            <p><strong>Balance:</strong> {org.balance ? org.balance : "None"}</p>
+                        <div
+                            key={index}
+                            className="organization-item bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col items-center space-y-4"
+                        >
                             {org.photoUrl && (
-                                <div>
-                                    <img
-                                        src={org.photoUrl}
-                                        alt={org.name}
-                                        className="organization-image"
-                                        style={{ width: "150px", height: "150px", objectFit: "cover" }} // Add size here
-                                    />
-                                </div>
+                                <img
+                                    src={org.photoUrl}
+                                    alt={org.name}
+                                    className="w-32 h-32 rounded-full object-cover border-4 border-blue-600"
+                                />
                             )}
-                        </li>
+                            <div className="text-center space-y-2">
+                                <p className="text-xl font-semibold">{org.name}</p>
+                                <p className="text-sm text-gray-400">Address: {org.address}</p>
+                                <p className="text-sm font-semibold">
+                                    Balance: {org.balance ? org.balance : "None"}
+                                </p>
+                            </div>
+                        </div>
                     ))}
-                </ul>
+                </div>
             )}
         </div>
     );

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { UserWeb3Context } from "../../hooks/Web3UserHook";
 import { useIPFS } from "../../context/IpfsContext"; // Import the IPFS context hook
-
+import metamaskLogo from "../../assets/metamask-logo.png"; // Adjust this path based on your file location
 
 export default function UserRegisterPage() {
   const { walletAddress, contract, connectWallet, disconnectWallet, error: web3Error } = useContext(UserWeb3Context);
@@ -36,7 +36,8 @@ export default function UserRegisterPage() {
           throw new Error(`IPFS Upload Error: ${ipfsError.message}`);
         }
       }
-      console.log("contract",contract);
+
+      console.log("contract", contract);
       const tx = await contract.registerUser(
         formData.name,
         photoIpfsHash
@@ -53,7 +54,7 @@ export default function UserRegisterPage() {
 
     } catch (error) {
       console.error("Registration error:", error);
-      setLocalError(error.reason || error.message || "Failed to register organization. Please try again.");
+      setLocalError(error.reason || error.message || "Failed to register user. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -77,51 +78,61 @@ export default function UserRegisterPage() {
   };
 
   const renderWalletButton = () => (
-    <div className="wallet-connect-container">
-      <div className="wallet-icon">🦊</div>
-      <h3>Connect Your Wallet</h3>
-      <p>Please connect your MetaMask wallet to continue</p>
-      <button onClick={connectWallet} className="connect-button">
+    <div className="wallet-connect-container bg-gray-800 p-6 rounded-xl shadow-lg text-white">
+      <div className="wallet-icon text-4xl mb-4">
+        <img src={metamaskLogo} alt="MetaMask Logo" className="w-12 h-12" />
+      </div>
+      <h3 className="text-xl font-semibold mb-2">Connect Your Wallet</h3>
+      <p className="text-gray-400 mb-4">Please connect your MetaMask wallet to continue</p>
+      <button onClick={connectWallet} className="w-full bg-blue-600 text-white py-3 rounded-lg transition-all duration-300 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
         Connect MetaMask
       </button>
     </div>
   );
 
   const renderWalletInfo = () => (
-    <div className="wallet-info">
-      <span>Connected Wallet</span>
-      <div className="wallet-address">{walletAddress}</div>
-      <button onClick={disconnectWallet} className="disconnect-button">
+    <div className="bg-gray-800 p-6 rounded-xl shadow-lg text-white mb-6">
+      <span className="text-lg">Connected Wallet</span>
+      <div className="text-sm font-semibold mt-2">{walletAddress}</div>
+      <button
+        onClick={() => {
+          console.log("Disconnecting wallet...");
+          disconnectWallet();
+        }}
+        className="mt-4 w-full bg-red-600 text-white py-3 rounded-lg transition-all duration-300 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+      >
         Disconnect
       </button>
     </div>
   );
 
   const renderForm = () => (
-    <form onSubmit={handleSubmit} className="registration-form">
+    <form onSubmit={handleSubmit} className="registration-form bg-gray-800 p-8 rounded-xl shadow-xl text-white">
       {renderWalletInfo()}
 
-      <div className="form-group">
-        <label>Enter your name </label>
+      <div className="form-group mb-4">
+        <label className="block text-sm font-semibold">Your Name</label>
         <input
           type="text"
           required
           placeholder="Aaryan Jain"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          className="w-full p-3 mt-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
 
-      <div className="form-group">
-        <label>Upload a cool photo</label>
-        <div className="file-input-wrapper">
+      <div className="form-group mb-4">
+        <label className="block text-sm font-semibold">Profile Photo</label>
+        <div className="file-input-wrapper mt-2">
           <input
             type="file"
             accept="image/*"
             onChange={handleFileChange}
+            className="w-full bg-gray-700 text-white p-3 rounded-lg focus:outline-none"
           />
           {formData.photo && (
-            <div className="file-info">
+            <div className="file-info mt-2 text-sm text-gray-400">
               Selected: {formData.photo.name}
             </div>
           )}
@@ -129,7 +140,7 @@ export default function UserRegisterPage() {
       </div>
 
       {(localError || web3Error || ipfsError) && (
-        <div className="error-message">
+        <div className="error-message text-red-500 text-sm mb-4">
           {localError || web3Error || ipfsError}
         </div>
       )}
@@ -137,17 +148,17 @@ export default function UserRegisterPage() {
       <button
         type="submit"
         disabled={loading}
-        className={`submit-button ${loading ? "loading" : ""}`}
+        className={`submit-button w-full py-3 mt-6 rounded-lg text-white ${loading ? "bg-gray-600" : "bg-blue-600"} transition-all duration-300 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500`}
       >
-        {loading ? "Registering..." : "Register Organization"}
+        {loading ? "Registering..." : "Register User"}
       </button>
     </form>
   );
 
   return (
-    <div className="register-page">
-      <div className="register-container">
-        <h1>Register Organization</h1>
+    <div className="register-page bg-gray-900 min-h-screen flex items-center justify-center text-gray-100">
+      <div className="register-container bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-2xl">
+        <h1 className="text-3xl font-semibold mb-8">Register User</h1>
         {!walletAddress ? renderWalletButton() : renderForm()}
       </div>
     </div>

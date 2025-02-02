@@ -9,27 +9,23 @@ import Navbar from "./components/Navbar";
 import RegisterPage from "./pages/RegisterPage";
 import UserRegisterPage from "./pages/EcoCoin/Registerpage";
 import UserClaimSubmissionPage from "./pages/EcoCoin/ClaimPage";
-import ClaimsListingPage from "./pages/EcoCoin/ClaimsPage";
 
 
 function App() {
   return (
     <Router>
-
-      
-      {/* <Web3Provider>
+      <Web3Provider>
         <Navbar />
         <Routes>
           <Route path="organisation/register" element={<OrganisationRegisterPage />} />
           <Route path="organisation/marketplace" element={<OrganisationMarketplace />} />
           <Route path="organisation/claim" element={<OrganisationClaimPage />} />
         </Routes>
-      </Web3Provider> */}
+      </Web3Provider>
       <UserWeb3Provider>
         <Routes>
-          <Route path="user/register" element={<UserRegisterPage/>} />
-          <Route path="user/claim" element={<UserClaimSubmissionPage/>} />
-          <Route path="user/claimspage" element={<ClaimsListingPage/>} />
+          <Route path="user/register" element={<UserRegisterPage />} />
+          <Route path="user/claim" element={<UserClaimSubmissionPage />} />
         </Routes>
       </UserWeb3Provider>
       <Routes>
