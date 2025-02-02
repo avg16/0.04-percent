@@ -3,6 +3,7 @@ import { Web3Context } from "../../hooks/Web3hook";
 import { useIPFS } from "../../context/IpfsContext"; // Import the IPFS context hook
 import { Link } from "react-router-dom"; // Import Link for navigation
 import backgroundImage from "../../assets/cover.jpg"; // Import the local image
+import metamaskLogo from "../../assets/metamask-logo.png"; // Import MetaMask logo
 
 export default function OrganisationRegisterPage() {
   const { walletAddress, contract, connectWallet, disconnectWallet, error: web3Error } = useContext(Web3Context);
@@ -64,22 +65,6 @@ export default function OrganisationRegisterPage() {
     }
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (file.size > 10 * 1024 * 1024) {
-        setLocalError("File size too large. Maximum size is 10MB.");
-        return;
-      }
-      if (!file.type.startsWith('image/')) {
-        setLocalError("Only image files are allowed.");
-        return;
-      }
-      setLocalError("");
-      setFormData({ ...formData, photo: file });
-    }
-  };
-
   return (
     <div className="relative min-h-screen flex items-center justify-center text-gray-100">
       {/* Background Image */}
@@ -94,10 +79,9 @@ export default function OrganisationRegisterPage() {
       <div className="relative z-10 bg-gray-800 bg-opacity-90 p-10 rounded-2xl shadow-2xl w-full max-w-2xl backdrop-blur-lg">
         <h1 className="text-3xl font-semibold mb-8 text-center">Register Organization</h1>
 
-        {/* Wallet Connection Section */}
         {!walletAddress ? (
           <div className="flex flex-col items-center bg-gray-900 p-6 rounded-xl shadow-lg">
-            <div className="text-4xl mb-4">🦊</div>
+            <img src={metamaskLogo} alt="MetaMask" className="w-12 h-12 mb-4" />
             <h3 className="text-xl font-semibold mb-2">Connect Your Wallet</h3>
             <p className="text-gray-400 mb-4">Please connect your MetaMask wallet to continue</p>
             <button onClick={connectWallet} className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition">
@@ -106,7 +90,6 @@ export default function OrganisationRegisterPage() {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Wallet Address */}
             <div className="bg-gray-900 p-6 rounded-xl shadow-lg text-white text-center">
               <span className="text-lg">Connected Wallet</span>
               <div className="text-sm font-semibold mt-2 break-words">{walletAddress}</div>
@@ -115,55 +98,17 @@ export default function OrganisationRegisterPage() {
               </button>
             </div>
 
-            {/* Organization Name */}
             <div>
               <label className="block text-sm font-semibold">Organization Name</label>
-              <input
-                type="text"
-                required
-                placeholder="Enter organization name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full p-3 mt-2 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500"
-              />
+              <input type="text" required placeholder="Enter organization name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="w-full p-3 mt-2 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500" />
             </div>
 
-            {/* Net Emission */}
             <div>
               <label className="block text-sm font-semibold">Net Emission (tons CO2)</label>
-              <input
-                type="number"
-                required
-                placeholder="Enter net emission"
-                value={formData.netEmission}
-                onChange={(e) => setFormData({ ...formData, netEmission: e.target.value })}
-                className="w-full p-3 mt-2 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500"
-              />
+              <input type="number" required placeholder="Enter net emission" value={formData.netEmission} onChange={(e) => setFormData({ ...formData, netEmission: e.target.value })} className="w-full p-3 mt-2 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500" />
             </div>
 
-            {/* File Upload */}
-            <div>
-              <label className="block text-sm font-semibold">Organization Photo</label>
-              <div className="mt-2 border-2 border-dashed border-gray-600 p-4 rounded-lg text-center">
-                <input type="file" accept="image/*" onChange={handleFileChange} className="w-full text-gray-400" />
-                {formData.photo && (
-                  <p className="mt-2 text-gray-300">Selected: {formData.photo.name}</p>
-                )}
-              </div>
-            </div>
-
-            {/* Error Message */}
-            {(localError || web3Error || ipfsError) && (
-              <div className="text-red-500 text-sm">{localError || web3Error || ipfsError}</div>
-            )}
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className={`w-full py-3 rounded-lg text-white ${loading ? "bg-gray-600" : "bg-blue-600 hover:bg-blue-700 transition"
-                }`}
-            >
+            <button type="submit" disabled={loading} className={`w-full py-3 rounded-lg text-white ${loading ? "bg-gray-600" : "bg-blue-600 hover:bg-blue-700 transition"}`}>
               {loading ? "Registering..." : "Register Organization"}
             </button>
           </form>
@@ -172,4 +117,3 @@ export default function OrganisationRegisterPage() {
     </div>
   );
 }
-
