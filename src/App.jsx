@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar";
 import RegisterPage from "./pages/RegisterPage";
 import UserRegisterPage from "./pages/EcoCoin/Registerpage";
 import UserClaimSubmissionPage from "./pages/EcoCoin/ClaimPage";
+import LandingPage from "./pages/Home/LandingPage";
 
 
 function App() {
@@ -22,14 +23,15 @@ function App() {
           <Route path="organisation/claim" element={<OrganisationClaimPage />} />
         </Routes>
       </Web3Provider>
-      <UserWeb3Provider>
+      {/* <UserWeb3Provider>
         <Routes>
           <Route path="user/register" element={<UserRegisterPage />} />
           <Route path="user/claim" element={<UserClaimSubmissionPage />} />
         </Routes>
-      </UserWeb3Provider>
+      </UserWeb3Provider> */}
       <Routes>
         <Route path="register" element={<RegisterPage />} />
+        <Route path="" element={<LandingPage />} />
       </Routes>
     </Router>
   );

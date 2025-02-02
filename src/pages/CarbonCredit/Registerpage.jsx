@@ -1,7 +1,8 @@
 import React, { useState, useContext } from "react";
 import { Web3Context } from "../../hooks/Web3hook";
 import { useIPFS } from "../../context/IpfsContext"; // Import the IPFS context hook
-import metamaskLogo from "../../assets/metamask-logo.png"; // Adjust this path based on your file location
+import { Link } from "react-router-dom"; // Import Link for navigation
+import backgroundImage from "../../assets/cover.jpg"; // Import the local image
 
 export default function OrganisationRegisterPage() {
   const { walletAddress, contract, connectWallet, disconnectWallet, error: web3Error } = useContext(Web3Context);
@@ -10,8 +11,9 @@ export default function OrganisationRegisterPage() {
   const [formData, setFormData] = useState({
     name: "",
     netEmission: "",
-    photo: null, // Changed from photoIpfsHash to photo
+    photo: null,
   });
+
   const [loading, setLoading] = useState(false);
   const [localError, setLocalError] = useState("");
 
@@ -25,7 +27,6 @@ export default function OrganisationRegisterPage() {
         throw new Error("Contract not initialized. Try reconnecting the wallet.");
       }
 
-      // Upload photo to IPFS if it exists
       let photoIpfsHash = "";
       if (formData.photo) {
         try {
@@ -39,7 +40,7 @@ export default function OrganisationRegisterPage() {
       }
 
       alert("ipfsHash: " + photoIpfsHash);
-      // Register organization
+
       const tx = await contract.registerOrganization(
         formData.name,
         formData.netEmission,
@@ -49,11 +50,10 @@ export default function OrganisationRegisterPage() {
       await tx.wait();
       alert("Organization registered successfully!");
 
-      // Clear form after successful registration
       setFormData({
         name: "",
         netEmission: "",
-        photo: null
+        photo: null,
       });
 
     } catch (error) {
@@ -67,8 +67,7 @@ export default function OrganisationRegisterPage() {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Basic file validation
-      if (file.size > 10 * 1024 * 1024) { // 10MB limit
+      if (file.size > 10 * 1024 * 1024) {
         setLocalError("File size too large. Maximum size is 10MB.");
         return;
       }
@@ -81,96 +80,96 @@ export default function OrganisationRegisterPage() {
     }
   };
 
-  const renderWalletButton = () => (
-    <div className="wallet-connect-container bg-gray-800 p-6 rounded-xl shadow-lg text-white">
-      <div className="wallet-icon text-4xl mb-4">
-        <img src={metamaskLogo} alt="MetaMask Logo" className="w-12 h-12" />
-      </div>
-      <h3 className="text-xl font-semibold mb-2">Connect Your Wallet</h3>
-      <p className="text-gray-400 mb-4">Please connect your MetaMask wallet to continue</p>
-      <button onClick={connectWallet} className="w-full bg-blue-600 text-white py-3 rounded-lg transition-all duration-300 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        Connect MetaMask
-      </button>
-    </div>
-  );
-
-  const renderWalletInfo = () => (
-    <div className="bg-gray-800 p-6 rounded-xl shadow-lg text-white mb-6">
-      <span className="text-lg">Connected Wallet</span>
-      <div className="text-sm font-semibold mt-2">{walletAddress}</div>
-      <button onClick={disconnectWallet} className="mt-4 w-full bg-red-600 text-white py-3 rounded-lg transition-all duration-300 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
-        Disconnect
-      </button>
-    </div>
-  );
-
-  const renderForm = () => (
-    <form onSubmit={handleSubmit} className="registration-form bg-gray-800 p-8 rounded-xl shadow-xl text-white">
-      {renderWalletInfo()}
-
-      <div className="form-group mb-4">
-        <label className="block text-sm font-semibold">Organization Name</label>
-        <input
-          type="text"
-          required
-          placeholder="Enter organization name"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="w-full p-3 mt-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-
-      <div className="form-group mb-4">
-        <label className="block text-sm font-semibold">Net Emission (tons CO2)</label>
-        <input
-          type="number"
-          required
-          placeholder="Enter net emission"
-          value={formData.netEmission}
-          onChange={(e) => setFormData({ ...formData, netEmission: e.target.value })}
-          className="w-full p-3 mt-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-
-      <div className="form-group mb-4">
-        <label className="block text-sm font-semibold">Organization Photo</label>
-        <div className="file-input-wrapper mt-2">
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="w-full bg-gray-700 text-white p-3 rounded-lg focus:outline-none"
-          />
-          {formData.photo && (
-            <div className="file-info mt-2 text-sm text-gray-400">
-              Selected: {formData.photo.name}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {(localError || web3Error || ipfsError) && (
-        <div className="error-message text-red-500 text-sm mb-4">
-          {localError || web3Error || ipfsError}
-        </div>
-      )}
-
-      <button
-        type="submit"
-        disabled={loading}
-        className={`submit-button w-full py-3 mt-6 rounded-lg text-white ${loading ? "bg-gray-600" : "bg-blue-600"} transition-all duration-300 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500`}
-      >
-        {loading ? "Registering..." : "Register Organization"}
-      </button>
-    </form>
-  );
-
   return (
-    <div className="register-page bg-gray-900 min-h-screen flex items-center justify-center text-gray-100">
-      <div className="register-container bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-2xl">
-        <h1 className="text-3xl font-semibold mb-8">Register Organization</h1>
-        {!walletAddress ? renderWalletButton() : renderForm()}
+    <div className="relative min-h-screen flex items-center justify-center text-gray-100">
+      {/* Background Image */}
+      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${backgroundImage})` }}></div>
+      <div className="absolute inset-0 bg-black opacity-60"></div>
+
+      {/* Home Button */}
+      <Link to="/" className="absolute top-6 left-6 bg-gray-900 bg-opacity-80 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition">
+        ⬅ Home
+      </Link>
+
+      <div className="relative z-10 bg-gray-800 bg-opacity-90 p-10 rounded-2xl shadow-2xl w-full max-w-2xl backdrop-blur-lg">
+        <h1 className="text-3xl font-semibold mb-8 text-center">Register Organization</h1>
+
+        {/* Wallet Connection Section */}
+        {!walletAddress ? (
+          <div className="flex flex-col items-center bg-gray-900 p-6 rounded-xl shadow-lg">
+            <div className="text-4xl mb-4">🦊</div>
+            <h3 className="text-xl font-semibold mb-2">Connect Your Wallet</h3>
+            <p className="text-gray-400 mb-4">Please connect your MetaMask wallet to continue</p>
+            <button onClick={connectWallet} className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition">
+              Connect MetaMask
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Wallet Address */}
+            <div className="bg-gray-900 p-6 rounded-xl shadow-lg text-white text-center">
+              <span className="text-lg">Connected Wallet</span>
+              <div className="text-sm font-semibold mt-2 break-words">{walletAddress}</div>
+              <button onClick={disconnectWallet} className="mt-4 w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition">
+                Disconnect
+              </button>
+            </div>
+
+            {/* Organization Name */}
+            <div>
+              <label className="block text-sm font-semibold">Organization Name</label>
+              <input
+                type="text"
+                required
+                placeholder="Enter organization name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className="w-full p-3 mt-2 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            {/* Net Emission */}
+            <div>
+              <label className="block text-sm font-semibold">Net Emission (tons CO2)</label>
+              <input
+                type="number"
+                required
+                placeholder="Enter net emission"
+                value={formData.netEmission}
+                onChange={(e) => setFormData({ ...formData, netEmission: e.target.value })}
+                className="w-full p-3 mt-2 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            {/* File Upload */}
+            <div>
+              <label className="block text-sm font-semibold">Organization Photo</label>
+              <div className="mt-2 border-2 border-dashed border-gray-600 p-4 rounded-lg text-center">
+                <input type="file" accept="image/*" onChange={handleFileChange} className="w-full text-gray-400" />
+                {formData.photo && (
+                  <p className="mt-2 text-gray-300">Selected: {formData.photo.name}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Error Message */}
+            {(localError || web3Error || ipfsError) && (
+              <div className="text-red-500 text-sm">{localError || web3Error || ipfsError}</div>
+            )}
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-full py-3 rounded-lg text-white ${loading ? "bg-gray-600" : "bg-blue-600 hover:bg-blue-700 transition"
+                }`}
+            >
+              {loading ? "Registering..." : "Register Organization"}
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );
 }
+
